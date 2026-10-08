@@ -1124,7 +1124,7 @@ function applyEdits(){
           if (used.has(id)) return null;
           if (isAudioData(t.src) && !UPLOADS[id]) UPLOADS[id] = String(t.src);
           used.add(id);
-          return { id, title, sub, shift:0, tempo:1, rain:0, src:UPLOADS[id] || '', yt:'', up:1, fname:str(t.fname, 80) };
+          return { id, title, sub, shift:0, tempo:1, rain:0, src:UPLOADS[id] || (/^nhac\d+\.mp3$/i.test(String(t.src || '')) ? String(t.src) : ''), yt:'', up:1, fname:str(t.fname, 80) };
         }
         const yt = ytId(t.yt), src = safeUrl(t.src) || '';
         if (!yt && !src) return null;
@@ -1142,7 +1142,7 @@ const editBlock = () => {
   const o = effectiveEdits();
   ['plum', 'cute'].forEach(k => {
     const e = o[k]; if (!e || !Array.isArray(e.playlist)) return;
-    o[k] = Object.assign({}, e, { playlist: e.playlist.map(t => (t && t.up) ? Object.assign({}, t, { src: UPLOADS[t.id] || '' }) : t) });
+    o[k] = Object.assign({}, e, { playlist: e.playlist.map(t => (t && t.up) ? Object.assign({}, t, { src: UPLOADS[t.id] || (/^nhac\d+\.mp3$/i.test(String(t.src || '')) ? t.src : '') }) : t) });
   });
   ['plum', 'cute'].forEach(k => {          /* Char tạo trong Sửa trang cũng được đăng cùng file */
     const cs = userChars().filter(c => c.section === k).map(c => { const x = Object.assign({}, c); delete x.section; return x; });
